@@ -71,5 +71,25 @@ region="${AZURE_REGION}"
 ssh_public_key="${SSH_PUBLIC_KEY}"
 EOF
 
-echo "You can bootstrap the jumpbox on Azure by running:"
-echo "  $ ./install.sh"
+echo "Sleeping for 60 extra seconds to let the registrations propagate..."
+sleep 60
+
+# Let's terraform this Jumpbox!
+#
+echo "Initializing Terraform"
+terraform init || exit 1
+
+echo "Running Terraform"
+terraform apply -auto-approve || exit 1
+
+JUMPBOX_IP=$(az vm list-ip-addresses -n jbox-pcf --query [0].virtualMachine.network.publicIpAddresses[0].ipAddress -o tsv)
+
+echo ""
+echo "You successfully bootstrapped the jumpbox on Azure and can now start installing PCF."
+echo ""
+echo "You can now initialize the installation process from the jumpbox:"
+echo "  $ ssh ubuntu@$JUMPBOX_IP -i azurejumpbox_rsa"
+echo "  $ cd /home/ubuntu/scripts"
+echo "  $ ./init.sh"
+
+
