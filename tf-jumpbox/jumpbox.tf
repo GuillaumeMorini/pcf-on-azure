@@ -151,29 +151,7 @@ resource "azurerm_virtual_machine" "jumpboxvm" {
     }
 
     provisioner "file" {
-        source      = "../config" # no trailing slash - check Terraform documentation for file provisioner
-        destination = "/home/ubuntu"
-
-        connection {
-            type = "ssh"
-            user = "ubuntu"
-            private_key = "${file("azurejumpbox_rsa")}"
-        }  
-    }
-
-    provisioner "file" {
         source      = "../scripts"
-        destination = "/home/ubuntu"
-
-        connection {
-                type = "ssh"
-                user = "ubuntu"
-                private_key = "${file("azurejumpbox_rsa")}"
-        }
-    }
-
-    provisioner "file" {
-        source      = "../templates"
         destination = "/home/ubuntu"
 
         connection {
