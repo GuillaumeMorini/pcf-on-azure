@@ -15,38 +15,36 @@ sudo apt install --yes build-essential && \
 sudo apt install --yes ruby-dev && \
 sudo gem install --no-ri --no-rdoc cf-uaac
 
-# GCloud CLI
-export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-echo "Adding the GCLOUD repo to apt-get"
-echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-echo "Downloading the GCloud key"
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echoo "Installing the GCLOUD SDK"
-sudo apt-get install --yes google-cloud-sdk
+# PCF CLI
+wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+sudo apt-get update
+sudo apt-get install cf-cli
+
 
 # Terraform
-wget -O terraform.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && \
+wget -O terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && \
   unzip terraform.zip && \
   sudo mv terraform /usr/local/bin && \
   rm terraform.zip
 
 # PCF OM CLI
-wget -O om https://github.com/pivotal-cf/om/releases/download/0.51.0/om-linux && \
+wget -O om https://github.com/pivotal-cf/om/releases/download/1.0.0/om-linux && \
   chmod +x om && \
   sudo mv om /usr/local/bin/
 
 # BOSH CLI
-wget -O bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.4.0-linux-amd64 && \
+wget -O bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.5.0-linux-amd64 && \
   chmod +x bosh && \
   sudo mv bosh /usr/local/bin/
 
 # BBR CLI
-wget -O /tmp/bbr.tar https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/download/v1.3.2/bbr-1.3.2.tar && \
+wget -O /tmp/bbr.tar https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/download/v1.5.1/bbr-1.5.1.tar && \
   tar xvC /tmp/ -f /tmp/bbr.tar && \
   sudo mv /tmp/releases/bbr /usr/local/bin/
 
 # PivNet CLI
-VERSION=0.0.55
+VERSION=0.0.58
 wget -O pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v${VERSION}/pivnet-linux-amd64-${VERSION} && \
   chmod +x pivnet && \
   sudo mv pivnet /usr/local/bin/
