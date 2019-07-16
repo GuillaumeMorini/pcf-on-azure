@@ -18,6 +18,7 @@ SSH_PUBLIC_KEY=`cat azurejumpbox_rsa.pub`
 echo
 echo
 
+read -p "Please input the name of the jumpbox: " JUMPBOX_NAME
 read -p "Please input the name of the resource group for the jumpbox: " JUMPBOX_RG 
 echo "Please select the region to deploy PCF: " 
 select AZURE_REGION in "Australia East" "Australia Southeast" "Brazil South" "Canada Central" "Canada East" "Central India" "Central US" "East Asia" "East US" "East US 2" "France Central" "Japan East" "Japan West" "Korea Central" "Korea South" "North Central US" "North Europe" "South Central US" "South India" "Southeast Asia" "UK South" "UK West" "West Central US" "West Europe" "West India" "West US" "West US 2"
@@ -32,7 +33,7 @@ AZURE_SP_PWD=$(printf "Pivotal-%s-%s" "${JUMPBOX_RG}" "$RANDOM")
 
 echo "Initializing the Azure AD Application"
 AZURE_CLIENT_SECRET="$AZURE_SP_PWD"
-AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for BOSH" \
+AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for jumpbox ${JUMPBOX_NAME}" \
 	--password $AZURE_SP_PWD --homepage "http://BOSHAzureCPI" \
         --identifier-uris $AZURE_APP_IDENTIFIER_URI --query "appId"`
 
@@ -67,6 +68,7 @@ client_id=$AZURE_CLIENT_ID
 client_secret="${AZURE_CLIENT_SECRET}"
 
 resource_group="${JUMPBOX_RG}"
+jumpbox_name="${JUMPBOX_NAME}"
 region="${AZURE_REGION}"
 ssh_public_key="${SSH_PUBLIC_KEY}"
 EOF
@@ -82,7 +84,7 @@ terraform init || exit 1
 echo "Running Terraform"
 terraform apply -auto-approve || exit 1
 
-JUMPBOX_IP=$(az vm list-ip-addresses -n jbox-pcf --query [0].virtualMachine.network.publicIpAddresses[0].ipAddress -o tsv)
+JUMPBOX_IP=$(az vm list-ip-addresses -n ${JUMPBOX_NAME} --query [0].virtualMachine.network.publicIpAddresses[0].ipAddress -o tsv)
 
 echo ""
 echo "You successfully bootstrapped the jumpbox on Azure and can now start installing PCF."

@@ -25,3 +25,7 @@ variable "region" {
 variable "ssh_public_key" {
     type = "string"
 }
+
+variable "jumpbox_name" {
+    type = "string"
+}

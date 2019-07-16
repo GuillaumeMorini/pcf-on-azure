@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "deployment_resourcegroup" {
     name     = "${var.resource_group}"
     location = "${var.region}"
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "jumpboxnetwork" {
     location            = "${var.region}"
     resource_group_name = "${azurerm_resource_group.deployment_resourcegroup.name}"
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
@@ -33,9 +33,9 @@ resource "azurerm_public_ip" "jumpboxpublicip" {
     name                         = "jumpboxPublicIP"
     location                     = "${var.region}"
     resource_group_name          = "${azurerm_resource_group.deployment_resourcegroup.name}"
-    public_ip_address_allocation = "dynamic"
+    allocation_method 		= "Dynamic"
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "jumpboxnsg" {
         destination_address_prefix = "*"
     }
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
@@ -78,7 +78,7 @@ resource "azurerm_network_interface" "jumpboxnic" {
         public_ip_address_id          = "${azurerm_public_ip.jumpboxpublicip.id}"
     }
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
@@ -101,14 +101,14 @@ resource "azurerm_storage_account" "mystorageaccount" {
     account_tier                = "Standard"
     account_replication_type    = "LRS"
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 }
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "jumpboxvm" {
-    name                  = "jbox-pcf"
+    name                  = "${var.jumpbox_name}"
     location              = "${var.region}"
     resource_group_name   = "${azurerm_resource_group.deployment_resourcegroup.name}"
     network_interface_ids = ["${azurerm_network_interface.jumpboxnic.id}"]
@@ -146,7 +146,7 @@ resource "azurerm_virtual_machine" "jumpboxvm" {
         storage_uri = "${azurerm_storage_account.mystorageaccount.primary_blob_endpoint}"
     }
 
-    tags {
+    tags = {
         environment = "${var.resource_group}"
     }
 
@@ -164,7 +164,7 @@ resource "azurerm_virtual_machine" "jumpboxvm" {
     provisioner "remote-exec" {
         inline = [
         "chmod +x /home/ubuntu/scripts/*.sh",
-        ". /home/ubuntu/scripts/init-jumpbox.sh"
+#        ". /home/ubuntu/scripts/init-jumpbox.sh"
         ]
 
         connection {
