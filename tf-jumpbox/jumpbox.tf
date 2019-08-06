@@ -164,7 +164,7 @@ resource "azurerm_virtual_machine" "jumpboxvm" {
     provisioner "remote-exec" {
         inline = [
         "chmod +x /home/ubuntu/scripts/*.sh",
-#        ". /home/ubuntu/scripts/init-jumpbox.sh"
+        ". /home/ubuntu/scripts/init-jumpbox.sh"
         ]
 
         connection {

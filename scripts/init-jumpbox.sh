@@ -29,12 +29,12 @@ wget -O terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform
   rm terraform.zip
 
 # PCF OM CLI
-wget -O om https://github.com/pivotal-cf/om/releases/download/1.0.0/om-linux && \
+wget -O om https://github.com/pivotal-cf/om/releases/download/3.0.0/om-linux-3.0.0 && \
   chmod +x om && \
   sudo mv om /usr/local/bin/
 
 # BOSH CLI
-wget -O bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-5.5.0-linux-amd64 && \
+wget -O bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.0.0/bosh-cli-6.0.0-linux-amd64 && \
   chmod +x bosh && \
   sudo mv bosh /usr/local/bin/
 
@@ -44,22 +44,22 @@ wget -O /tmp/bbr.tar https://github.com/cloudfoundry-incubator/bosh-backup-and-r
   sudo mv /tmp/releases/bbr /usr/local/bin/
 
 # PivNet CLI
-VERSION=0.0.58
+VERSION=0.0.60
 wget -O pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v${VERSION}/pivnet-linux-amd64-${VERSION} && \
   chmod +x pivnet && \
   sudo mv pivnet /usr/local/bin/
 
 # Azure CLI
-sudo apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y
+sudo apt-get update --yes
+sudo apt-get install curl apt-transport-https lsb-release gnupg --yes
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
+    gpg --dearmor | \
+    sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
 AZ_REPO=$(lsb_release -cs)
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
     sudo tee /etc/apt/sources.list.d/azure-cli.list
-
-sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
-     --keyserver packages.microsoft.com \
-     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
-sudo apt-get update
-sudo apt-get install azure-cli
+sudo apt-get update --yes
+sudo apt-get install azure-cli --yes
 
 # let's make sure that our environment is still up-to-date
 sudo apt-get upgrade --yes
