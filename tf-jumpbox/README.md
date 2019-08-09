@@ -20,7 +20,7 @@ In order to deploy the jumpbox on Azure, one needs:
 1. Log into Azure and set the correct subscription
    
         az login
-        az account show
+        az account list
         az account set --subscription <subscription_name>
 
 2. Assuming you are currently located in the top directory of `pcf-on-azure`, change directory to 'tf-jumpbox'.

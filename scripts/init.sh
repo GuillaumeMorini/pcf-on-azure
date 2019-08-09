@@ -12,19 +12,21 @@ read -p "Please input your domain name: " AZURE_DOMAIN_SUFFIX
 read -p "Please input the name of the resource group for PCF (lower case): " PCF_RG 
 read -p "Please input your PivNet token: " PIVNET_TOKEN
 read -p "Please input a password for OpsManager: " OPSMAN_ADMIN_PWD
+read -p "Please input the desired version of Ops Manager: " OPSMAN_VERSION
+read -p "Please input the desired version of PAS: " PAS_VERSION
+read -p "Please input the desired version of PKS: " PKS_VERSION
+read -p "Please input the desired version of Harbor: " HARBOR_VERSION
+
 
 echo "Please select the region to deploy PCF: " 
 select AZURE_REGION in "Australia East" "Australia Southeast" "Brazil South" "Canada Central" "Canada East" "Central India" "Central US" "East Asia" "East US" "East US 2" "France Central" "Japan East" "Japan West" "Korea Central" "Korea South" "North Central US" "North Europe" "South Central US" "South India" "Southeast Asia" "UK South" "UK West" "West Central US" "West Europe" "West India" "West US" "West US 2"
 do
     break
 done
+
+# TODO: this will need to be automatically generated
 read -p "Please input the URI of OpsManager VHD: " OPSMAN_URI
 
-echo "Please select which product to install: "
-select PAS_OR_PKS in "PAS" "PKS"
-do
-    break
-done
 
 AZURE_SUBSCRIPTION_ID=`az account show --query id`
 AZURE_TENANT_ID=`az account show --query tenantId`
@@ -37,7 +39,7 @@ IS_APP_PRESENT=`az ad app list --identifier-uri $AZURE_APP_IDENTIFIER_URI`
     
 echo "Initializing the Azure AD Application"
 AZURE_CLIENT_SECRET="$AZURE_SP_PWD"
-AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for BOSH" \
+AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for PKS " \
 	--password $AZURE_SP_PWD --homepage "http://BOSHAzureCPI" \
         --identifier-uris $AZURE_APP_IDENTIFIER_URI --query "appId"`
 
@@ -91,10 +93,11 @@ PCF_OPSMAN_ADMIN_PASSWD="${OPSMAN_ADMIN_PWD}"
 PCF_REGION="${AZURE_REGION}"
 PCF_OPSMAN_FQDN=pcf.${PCF_RG}.${AZURE_DOMAIN_SUFFIX}
 
-# Product versions - to be replaced with questions and queries to PivNet
-OPSMAN_VERSION="2.4.1"
-PAS_VERSION="2.4.1"
-PKS_VERSION="1.3"
+# Product versions 
+OPSMAN_VERSION="${OPSMAN_VERSION}"
+PAS_VERSION="${PAS_VERSION}"
+PKS_VERSION="${PKS_VERSION}"
+HARBOR_VERSION="${HARBOR_VERSION}"
 
 # OM CLI Specifics
 OM_TARGET=pcf.${PCF_RG}.${AZURE_DOMAIN_SUFFIX}
@@ -105,16 +108,13 @@ EOF
 
 # Copy the terraform.tfvars file as an environment file as well
 # This will be used when installing Opsman
-cp terraform.tfvars ../config
+mkdir ../config
+mv terraform.tfvars ../config
 cp environment.cfg ~/.env
 mv environment.cfg ../config
 
 # Download the Terraform files
 ./init-opsman.sh
 
-# Trigger the install of PAS or PKS
-if [ "$PAS_OR_PKS" = "PAS" ]; then
-    ./init-pas.sh
-else
-    ./init-pks.sh
-fi
+# copy the terraform config file in the PAS directory and trigger the installation
+./init-pas.sh
