@@ -53,7 +53,7 @@ sleep 60
 AZURE_SCOPE=$(printf "/subscriptions/%s" "${AZURE_SUBSCRIPTION_ID//\"/}")
 echo "Azure Scope: $AZURE_SCOPE"
 az role assignment create --assignee-object-id $(printf "%s" "${AZURE_SP_OBJECT_ID//\"/}") \
-        --role Contributor --scope $AZURE_SCOPE
+        --role Owner --scope $AZURE_SCOPE
 
 echo
 echo "Registering subscription with Storage service"
@@ -114,7 +114,7 @@ cp environment.cfg ~/.env
 mv environment.cfg ../config
 
 # Download the Terraform files
-./init-opsman.sh
+./download-terraform.sh
 
 # copy the terraform config file in the PAS directory and trigger the installation
-./init-pas.sh
+# ./init-pas.sh
