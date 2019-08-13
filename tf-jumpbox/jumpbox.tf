@@ -40,6 +40,11 @@ resource "azurerm_public_ip" "jumpboxpublicip" {
     }
 }
 
+data "azurerm_public_ip" "publicip" {
+  name                = "${azurerm_public_ip.jumpboxpublicip.name}"
+  resource_group_name = "${azurerm_virtual_machine.jumpboxvm.resource_group_name}"
+}
+
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "jumpboxnsg" {

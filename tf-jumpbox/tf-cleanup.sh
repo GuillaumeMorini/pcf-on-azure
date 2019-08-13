@@ -6,3 +6,4 @@ rm azurejumpbox_rsa.pub
 rm terraform.tfstate
 rm terraform.tfstate.backup
 rm terraform.tfvars
+rm ssh-jumpbox.sh
