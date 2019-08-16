@@ -39,7 +39,7 @@ IS_APP_PRESENT=`az ad app list --identifier-uri $AZURE_APP_IDENTIFIER_URI`
     
 echo "Initializing the Azure AD Application"
 AZURE_CLIENT_SECRET="$AZURE_SP_PWD"
-AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for PKS " \
+AZURE_CLIENT_ID=`az ad app create --display-name "Service Principal for PCF " \
 	--password $AZURE_SP_PWD --homepage "http://BOSHAzureCPI" \
         --identifier-uris $AZURE_APP_IDENTIFIER_URI --query "appId"`
 

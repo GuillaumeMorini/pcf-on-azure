@@ -99,6 +99,6 @@ echo "You can now initialize the installation process from the jumpbox:"
 echo "  $ ./ssh-jumpbox.sh"
 echo "  $ az login   (THIS IS IMPORTANT!!!)"
 echo "  $ cd /home/ubuntu/scripts"
-echo "  $ ./init.sh"
+echo "  $ ./1-init.sh"
 
 
