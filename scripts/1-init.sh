@@ -116,5 +116,3 @@ mv environment.cfg ../config
 # Download the Terraform files
 ./download-terraform.sh
 
-# copy the terraform config file in the PAS directory and trigger the installation
-# ./init-pas.sh

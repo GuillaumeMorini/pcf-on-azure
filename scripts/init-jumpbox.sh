@@ -29,22 +29,22 @@ wget -O terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform
   rm terraform.zip
 
 # PCF OM CLI
-wget -O om https://github.com/pivotal-cf/om/releases/download/3.0.0/om-linux-3.0.0 && \
+wget -O om https://github.com/pivotal-cf/om/releases/download/4.0.1/om-linux-4.0.1 && \
   chmod +x om && \
   sudo mv om /usr/local/bin/
 
 # BOSH CLI
-wget -O bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.0.0/bosh-cli-6.0.0-linux-amd64 && \
+wget -O bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.1.0/bosh-cli-6.1.0-linux-amd64 && \
   chmod +x bosh && \
   sudo mv bosh /usr/local/bin/
 
 # BBR CLI
-wget -O /tmp/bbr.tar https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/download/v1.5.1/bbr-1.5.1.tar && \
+wget -O /tmp/bbr.tar https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/download/v1.5.2/bbr-1.5.2.tar && \
   tar xvC /tmp/ -f /tmp/bbr.tar && \
   sudo mv /tmp/releases/bbr /usr/local/bin/
 
 # PivNet CLI
-VERSION=0.0.60
+VERSION=0.0.63
 wget -O pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v${VERSION}/pivnet-linux-amd64-${VERSION} && \
   chmod +x pivnet && \
   sudo mv pivnet /usr/local/bin/

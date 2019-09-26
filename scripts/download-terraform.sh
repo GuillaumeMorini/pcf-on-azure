@@ -4,7 +4,7 @@ source "${HOME}/.env"
 echo "Initializing Pivotal Cloud Foundry Operations Manager ${OPSMAN_VERSION}"
 
 
-PRODUCT_NAME="Pivotal Application Service (formerly Elastic Runtime)" \
+PRODUCT_NAME="Pivotal Application Service" \
 DOWNLOAD_REGEX="Azure Terraform Templates" \
 PRODUCT_VERSION=${PAS_VERSION} \
   ${HOME}/scripts/download-product.sh || exit 1
